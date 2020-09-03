@@ -30,6 +30,10 @@ In order to reach former project milestones, I ‘will explore multiple GCP capa
          a. Add Member in the Service Account
          b. Add VM in the Service Account
         
+        <code>
+            gcloud iam service-accounts create read-bucket-objects 
+        </code>
+        
         Create a VM with the Service Account User
 
         gcloud beta compute --project=qwiklabs-gcp-01-586709e6acad instances create demoiam --zone=us-central1-c --machine-type=f1-micro --subnet=default --network-tier=PREMIUM --maintenance-policy=MIGRATE --service-account=read-bucket-objects@qwiklabs-gcp-01-586709e6acad.iam.gserviceaccount.com --scopes=https://www.googleapis.com/auth/cloud-platform --image=debian-9-stretch-v20200902 --image-project=debian-cloud --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=demoiam --reservation-affinity=any
