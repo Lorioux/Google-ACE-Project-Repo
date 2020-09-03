@@ -11,7 +11,7 @@ This project aims at creation cloud service take advantage of the Google Cloud P
 In order to reach former project milestones, I ‘will explore multiple GCP capabilities such as: 
 
     (1)	Cloud IAM – Access Management
-    (2)	Virtual Private Cloud (VPC) Networks – Network Management
+    (2)	Virtual Private Cloud (VPC) Networking – Network Management
     (3)	Compute Engine – Virtual Machines (VM) Provisioning
     (4)	Cloud Monitoring – VM Monitoring
     (5)	Cloud Marketplaces – Third-party resources exploration
