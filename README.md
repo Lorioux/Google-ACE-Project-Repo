@@ -26,7 +26,9 @@ In order to reach former project milestones, I ‘will explore multiple GCP capa
 
   As any business initiative need to be protected for non-authorized stakeholders, the cloud-based project (initiative) handled similarly as in-premise traditional project. Only affected – most directly affected stakeholders - need to have adequate minimal authorization levels to access project information and resources. Herein, we apply the same principle for two project stakeholders. One has full project ownership role, and another has some resources and capabilities writing and viewing (access) roles.
 
-        Explore the IAM console | Set up the Service Account User | Add Member in the Service Account
+     i) Set up the Service Account User:
+         a. Add Member in the Service Account
+         b. Add VM in the Service Account
         
         Create a VM with the Service Account User
 
