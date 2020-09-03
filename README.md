@@ -6,7 +6,7 @@ This project aims at creation cloud service take advantage of the Google Cloud P
     (2)	Adding the roles, service accounts and associating them to business stakeholders.
     (3)	Allocating project resources, and 
     (4)	Deploying the resources to execute the business service.
-    (5) Monitoring the project resources.
+    (5)     Monitoring the project resources.
 
 In order to reach former project milestones, I ‘will explore multiple GCP capabilities such as: 
 
@@ -19,7 +19,7 @@ In order to reach former project milestones, I ‘will explore multiple GCP capa
     (7)	Cloud SQL and BigQuery – Data Management
     (8)	Cloud Functions – Running Serverless Functions  
     (9)	Google Kubernetes Engine
-    (10)Google Cloud Boot
+    (10)    Google Cloud Boot
 
 
 1.	Project Access Management with Cloud IAM
