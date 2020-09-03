@@ -3,33 +3,21 @@ Google Associate Cloud Engineer Course Work
 This project aims at creation cloud service take advantage of the Google Cloud Platform Capabilities. Through this project, I will demonstrate how we start and development and deploy a cloud-based service by:
 
     (1)	creating a project for a business initiative.
-
     (2)	defining the roles of all business stakeholders, and authorization.
-
     (3)	allocating project resources, and 
-
     (4)	deploying the resources to execute the business service.
 
 In order to reach former project milestones, I ‘will explore multiple GCP capabilities such as: 
 
     (1)	Cloud IAM – Access Management
-
     (2)	Virtual Private Cloud (VPC) Networks – Network Management
-
     (3)	Compute Engine – Virtual Machines (VM) Provisioning
-
     (4)	Cloud Monitoring – VM Monitoring
-
     (5)	Cloud Marketplaces – Third-party resources exploration
-
     (6)	Deployment Manager
-
     (7)	Cloud SQL and BigQuery – Data Management
-
     (8)	Cloud Functions – Running Serverless Functions  
-
     (9)	Google Kubernetes Engine
-
     (10)	 Google Cloud Boot
 
 
