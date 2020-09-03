@@ -32,7 +32,13 @@ In order to reach former project milestones, I ‘will explore multiple GCP capa
 
   To ensure communication and accessibility of business service to in- and out-side world, a virtual computer network (VPC) is required. Therefore, we create VPC Networks inside for the project for internal and external connectivity. Though the networks will provide other resources like Virtual Machine and Applications with the needed Local and Global Internet Protocols (IP) Address.
 
-3. 
+3. Allocating Computing Resources (Virtual Machines) with Compute Engine
+
+  Like bare steel server hosted in-premisse, we rely on server running on Virtual Machines. The GCP Compute  Engine resource enable the creation on VM Instances as one would need to deploy web servers, application server, etc.    
+
+4. Exploring Cloud Monitoring to Manage Virtual Machines
+
+5. 
   
 Create a VM with the Service Account User
 
