@@ -10,8 +10,8 @@ This project aims at creation cloud service take advantage of the Google Cloud P
 
 In order to reach former project milestones, I ‘will explore multiple GCP capabilities such as: 
 
-    (1)	Cloud IAM – Access Management
-    (2)	Virtual Private Cloud (VPC) Networking – Network Management
+    (1)	Cloud IAM – Configuring Identity and Access Management
+    (2)	Virtual Private Cloud (VPC) Networking – Configuring Networks, Firewall and LoadBalancers
     (3)	Compute Engine – Virtual Machines (VM) Provisioning
     (4)	Cloud Monitoring – VM Monitoring
     (5)	Cloud Marketplaces – Third-party resources exploration
@@ -24,11 +24,10 @@ In order to reach former project milestones, I ‘will explore multiple GCP capa
 
 1.	Project Access Management with Cloud IAM
 
-  As any business initiative need to be protected for non-authorized stakeholders, the cloud-based project (initiative) handled similarly as in-premise traditional project. Only affected – most directly affected stakeholders - need to have adequate minimal authorization levels to access project information and resources. Herein, we apply the same principle for two project stakeholders. One has full project ownership role, and another has some resources and capabilities writing and viewing (access) roles.
-
-     i) Set up the Service Account User:
-         a. Add Member in the Service Account
-         b. Add VM in the Service Account
+  As any business initiative need to be protected for non-authorized stakeholders, the cloud-based project (initiative)is handled similarly. Only affected – most directly affected stakeholders - need to have adequate minimal authorization level to access project information and resources. Herein, we apply the same principle for this demo project by:
+  i)    Setting up stakeholder(users) roles
+  ii)   Setting up the Service Accounts
+  iii)  Binding Members to the Service Accounts and Roles
         
         <code>
             gcloud iam service-accounts create read-bucket-objects 
