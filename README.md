@@ -1,15 +1,15 @@
 ## Google Associate Cloud Engineer Course Work
 
 ### This project aims at creation cloud service take advantage of the Google Cloud Platform Capabilities. Through this project, will demonstrate how we organize, development and deploy a cloud-based service by:
-
-    <ol>
+<section>
+   <ol>
         <li> Creating a project for a business initiative. </li>
         <li> Adding the roles, service accounts and associating them to business stakeholders.</li>
         <li> Allocating project resources, and </li>
         <li> Deploying the resources to execute the business service.</li>
         <li> Monitoring the project resources.</li>
     </ol>
-
+</section>
 ### In order to reach former project milestones, I ‘will explore multiple GCP capabilities such as: 
 
     
@@ -31,16 +31,13 @@
 
   As any business initiative need to be protected for non-authorized stakeholders, the cloud-based project (initiative)is handled similarly. Only affected – most directly affected stakeholders - need to have adequate minimal authorization level to access project information and resources. Herein, we apply the same principle for this demo project by:
   
-    i)    Setting up stakeholder(users) roles
-    ii)   Setting up the Service Accounts
-    iii)  Binding Members to the Service Accounts and Roles
-    
-        
-        <code>
+   #### i)    Setting up stakeholder(users) roles
+   #### ii)   Setting up the Service Accounts
+   #### iii)  Binding Members to the Service Accounts and Roles
+   
             gcloud iam service-accounts create read-bucket-objects 
-        </code>
         
-        Create a VM with the Service Account User
+   #### iv)   Creating a VM with the Service Account User
 
         gcloud beta compute --project=qwiklabs-gcp-01-586709e6acad instances create demoiam --zone=us-central1-c --machine-type=f1-micro --subnet=default --network-tier=PREMIUM --maintenance-policy=MIGRATE --service-account=read-bucket-objects@qwiklabs-gcp-01-586709e6acad.iam.gserviceaccount.com --scopes=https://www.googleapis.com/auth/cloud-platform --image=debian-9-stretch-v20200902 --image-project=debian-cloud --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=demoiam --reservation-affinity=any
 
