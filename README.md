@@ -11,7 +11,7 @@ This project aims at creation cloud service take advantage of the Google Cloud P
 In order to reach former project milestones, I ‘will explore multiple GCP capabilities such as: 
 
     (1)	Cloud IAM – Cloud Resource Management 
-    (2)	Virtual Private Cloud (VPC) Networking – Configuring Networks, Firewall and LoadBalancers
+    (2)	Virtual Private Cloud (VPC) Networking – Configuring Networks, subnetworks, Firewall and LoadBalancers
     (3)	Compute Engine – Cloud Computing with Virtual Machines (VM)
     (4)	Cloud Monitoring – VM Monitoring
     (5)	Cloud Marketplaces – Third-party resources exploration
@@ -27,9 +27,7 @@ In order to reach former project milestones, I ‘will explore multiple GCP capa
   As any business initiative need to be protected for non-authorized stakeholders, the cloud-based project (initiative)is handled similarly. Only affected – most directly affected stakeholders - need to have adequate minimal authorization level to access project information and resources. Herein, we apply the same principle for this demo project by:
   
     i)    Setting up stakeholder(users) roles
-    
     ii)   Setting up the Service Accounts
-    
     iii)  Binding Members to the Service Accounts and Roles
     
         
@@ -44,8 +42,10 @@ In order to reach former project milestones, I ‘will explore multiple GCP capa
 
 2. Network Management with VPC Networks
 
-  To ensure communication and accessibility of business service to in- and out-side world, a virtual computer network (VPC) is required. Therefore, we create VPC Networks inside for the project for internal and external connectivity. Though the networks will provide other resources like Virtual Machine and Applications with the needed Local and Global Internet Protocols (IP) Address.
-      i) 
+  To ensure communication and accessibility of business service to in- and out-side world, a virtual computer network (VPC) is required. Google Cloud Virtual Private Cloud (VPC) provides networking functionality to Compute Engine virtual machine (VM) instances, Kubernetes Engine containers, and the App Engine flexible environment. In other words, without a VPC network, you cannot create VM instances, containers, or App Engine applications. A VPC network is a global resource that consists of a list of regional virtual subnetworks (subnets) in data centers, all connected by a global wide area network (WAN). VPC networks are logically isolated from each other in Google Cloud. We aim at exploring defaut, auto and customizable networking capabilities by:
+      
+      i) Creating auto mode networks
+      ii) Creating custom mode networks
 
 3. Cloud Computing Resources (Virtual Machines) with Compute Engine
 
