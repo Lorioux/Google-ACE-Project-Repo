@@ -25,9 +25,13 @@ In order to reach former project milestones, I ‘will explore multiple GCP capa
 1.	Project Access Management with Cloud IAM
 
   As any business initiative need to be protected for non-authorized stakeholders, the cloud-based project (initiative)is handled similarly. Only affected – most directly affected stakeholders - need to have adequate minimal authorization level to access project information and resources. Herein, we apply the same principle for this demo project by:
-  i)    Setting up stakeholder(users) roles
-  ii)   Setting up the Service Accounts
-  iii)  Binding Members to the Service Accounts and Roles
+  
+    i)    Setting up stakeholder(users) roles
+    
+    ii)   Setting up the Service Accounts
+    
+    iii)  Binding Members to the Service Accounts and Roles
+    
         
         <code>
             gcloud iam service-accounts create read-bucket-objects 
