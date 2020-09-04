@@ -47,11 +47,15 @@ In order to reach former project milestones, I ‘will explore multiple GCP capa
       
       i)  Exploring default network ( deleting and adding firewall rules)
       
-      declare -a rules=("${ gcloud compute firewall-rules list --format='table(name)'}")
+      declare -a rules=("$( gcloud compute firewall-rules list --format='table(name)')")
       for r in $rules[@]; do
           $(gcloud compute firewall-rules $r --quiet)
       done;
+      for n in $nets; do  if [[ "$index" -eq "0" ]]; then    $index = $index + 1;  else     $index = $index + 1;     echo $n; fi; done
       gcloud compute --project=qwiklabs-gcp-03-12714944c726 firewall-rules create NAME --direction=INGRESS --priority=1000 --       network=mynetwork --action=ALLOW --rules=PROTOCOL:PORT,...
+      
+      gcloud compute --project=qwiklabs-gcp-03-12714944c726 firewall-rules create managementnet-allow-icmp-ssh-rdp --direction=INGRESS --priority=1000 --network=managementnet --action=ALLOW --rules=tcp:22,tcp:3389,icmp --source-ranges=0.0.0.0/0
+      
       
       
       ii) Creating auto mode networks
@@ -67,57 +71,69 @@ In order to reach former project milestones, I ‘will explore multiple GCP capa
     gcloud compute firewall-rules create mynetwork-allow-rdp --project=qwiklabs-gcp-03-12714944c726 --network=projects/qwiklabs-gcp-03-12714944c726/global/networks/mynetwork --description=Allows\ RDP\ connections\ from\ any\ source\ to\ any\ instance\ on\ the\ network\ using\ port\ 3389. --direction=INGRESS --priority=65534 --source-ranges=0.0.0.0/0 --action=ALLOW --rules=tcp:3389
 
     gcloud compute firewall-rules create mynetwork-allow-ssh --project=qwiklabs-gcp-03-12714944c726 --network=projects/qwiklabs-gcp-03-12714944c726/global/networks/mynetwork --description=Allows\ TCP\ connections\ from\ any\ source\ to\ any\ instance\ on\ the\ network\ using\ port\ 22. --direction=INGRESS --priority=65534 --source-ranges=0.0.0.0/0 --action=ALLOW --rules=tcp:22
+    
+    {
+      "autoCreateSubnetworks": True,
+      "creationTimestamp": "2020-09-04T09:50:53.266-07:00",
+      "description": "",
+      "id": "915106178311114370",
+      "kind": "compute#network",
+      "name": "mynetwork",
+      "routingConfig": {
+        "routingMode": "REGIONAL"
+      },
+      "selfLink": "projects/qwiklabs-gcp-03-12714944c726/global/networks/mynetwork",
+      "subnetworks": [
+        "projects/qwiklabs-gcp-03-12714944c726/regions/europe-west1/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/us-east1/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/asia-southeast2/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/us-west4/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/us-west3/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/europe-north1/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/asia-northeast3/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/europe-west4/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/europe-west2/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/northamerica-northeast1/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/asia-east1/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/us-west2/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/europe-west3/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/us-west1/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/us-central1/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/asia-northeast2/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/asia-east2/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/asia-southeast1/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/australia-southeast1/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/southamerica-east1/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/europe-west6/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/us-east4/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/asia-northeast1/subnetworks/mynetwork",
+        "projects/qwiklabs-gcp-03-12714944c726/regions/asia-south1/subnetworks/mynetwork"
+      ]
+    }
+    
+    
+    
       
-      ii) Creating to custom mode networks
-      gcloud compute networks update mynetwork --switch-to-custom-subnet-mode --quiet
-      {
-  "autoCreateSubnetworks": False,
-  "creationTimestamp": "2020-09-04T09:50:53.266-07:00",
-  "description": "",
-  "id": "915106178311114370",
-  "kind": "compute#network",
-  "name": "mynetwork",
-  "routingConfig": {
-    "routingMode": "REGIONAL"
-  },
-  "selfLink": "projects/qwiklabs-gcp-03-12714944c726/global/networks/mynetwork",
-  "subnetworks": [
-    "projects/qwiklabs-gcp-03-12714944c726/regions/europe-west1/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/us-east1/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/asia-southeast2/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/us-west4/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/us-west3/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/europe-north1/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/asia-northeast3/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/europe-west4/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/europe-west2/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/northamerica-northeast1/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/asia-east1/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/us-west2/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/europe-west3/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/us-west1/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/us-central1/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/asia-northeast2/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/asia-east2/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/asia-southeast1/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/australia-southeast1/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/southamerica-east1/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/europe-west6/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/us-east4/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/asia-northeast1/subnetworks/mynetwork",
-    "projects/qwiklabs-gcp-03-12714944c726/regions/asia-south1/subnetworks/mynetwork"
-  ]
-}
+      ii) Creating custom mode networks
+            gcloud compute networks create managementnet --project=qwiklabs-gcp-03-12714944c726 --subnet-mode=custom --bgp-routing-mode=regional
 
-      
-      [ { "allowed": [ { "IPProtocol": "icmp" } ], "creationTimestamp": "2020-09-02T05:53:19.975-07:00", "description": "Allow ICMP from anywhere", "direction": "INGRESS", "disabled": false, "id": "6612380008690363216", "kind": "compute#firewall", "logConfig": { "enable": false }, "name": "default-allow-icmp", "network": "https://www.googleapis.com/compute/v1/projects/qwiklabs-gcp-03-12714944c726/global/networks/default", "priority": 65534, "selfLink": "https://www.googleapis.com/compute/v1/projects/qwiklabs-gcp-03-12714944c726/global/firewalls/default-allow-icmp", "sourceRanges": [ "0.0.0.0/0" ] }, { "allowed": [ { "IPProtocol": "tcp", "ports": [ "0-65535" ] }, { "IPProtocol": "udp", "ports": [ "0-65535" ] }, { "IPProtocol": "icmp" } ], "creationTimestamp": "2020-09-02T05:53:19.932-07:00", "description": "Allow internal traffic on the default network", "direction": "INGRESS", "disabled": false, "id": "7538125836719893328", "kind": "compute#firewall", "logConfig": { "enable": false }, "name": "default-allow-internal", "network": "https://www.googleapis.com/compute/v1/projects/qwiklabs-gcp-03-12714944c726/global/networks/default", "priority": 65534, "selfLink": "https://www.googleapis.com/compute/v1/projects/qwiklabs-gcp-03-12714944c726/global/firewalls/default-allow-internal", "sourceRanges": [ "10.128.0.0/9" ] }, { "allowed": [ { "IPProtocol": "tcp", "ports": [ "3389" ] } ], "creationTimestamp": "2020-09-02T05:53:19.961-07:00", "description": "Allow RDP from anywhere", "direction": "INGRESS", "disabled": false, "id": "4770309286085667664", "kind": "compute#firewall", "logConfig": { "enable": false }, "name": "default-allow-rdp", "network": "https://www.googleapis.com/compute/v1/projects/qwiklabs-gcp-03-12714944c726/global/networks/default", "priority": 65534, "selfLink": "https://www.googleapis.com/compute/v1/projects/qwiklabs-gcp-03-12714944c726/global/firewalls/default-allow-rdp", "sourceRanges": [ "0.0.0.0/0" ] }, { "allowed": [ { "IPProtocol": "tcp", "ports": [ "22" ] } ], "creationTimestamp": "2020-09-02T05:53:19.945-07:00", "description": "Allow SSH from anywhere", "direction": "INGRESS", "disabled": false, "id": "6115244746838518608", "kind": "compute#firewall", "logConfig": { "enable": false }, "name": "default-allow-ssh", "network": "https://www.googleapis.com/compute/v1/projects/qwiklabs-gcp-03-12714944c726/global/networks/default", "priority": 65534, "selfLink": "https://www.googleapis.com/compute/v1/projects/qwiklabs-gcp-03-12714944c726/global/firewalls/default-allow-ssh", "sourceRanges": [ "0.0.0.0/0" ] } ]
+            gcloud compute networks subnets create managementsubnet-us --project=qwiklabs-gcp-03-12714944c726 --range=10.130.0.0/20 --network=managementnet --region=us-central1
+            
+            a. Create custom private network and subnetwork (in us and europe)
+            gcloud compute networks create privatenet --subnet-mode=custom
+            gcloud compute networks subnets create privatesubnet-us --network=privatenet --region=us-central1 --range=172.16.0.0/24
+            gcloud compute networks subnets create privatesubnet-eu --network=privatenet --region=europe-west1 --range=172.20.0.0/20
 
 
-3. Cloud Computing Resources (Virtual Machines) with Compute Engine
+3. Cloud Computing Provisioning (Virtual Machines) with Compute Engine
 
   Like bare steel server hosted in-premisse, we rely on server running on Virtual Machines. The GCP Compute  Engine resource enable the creation on VM Instances as one would need to deploy web servers, application server, etc.
   
-  gcloud beta compute --project=qwiklabs-gcp-03-12714944c726 instances create mynet-eu-vm --zone=europe-west1-c --machine-type=n1-standard-1 --subnet=mynetwork --private-network-ip=10.132.0.2 --network-tier=PREMIUM --maintenance-policy=MIGRATE --service-account=567764395026-compute@developer.gserviceaccount.com scopes=https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/trace.append --image=debian-9-stretch-v20200902 --image-project=debian-cloud --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=mynet-eu-vm --reservation-affinity=any
+      gcloud beta compute --project=qwiklabs-gcp-03-12714944c726 instances create mynet-eu-vm --zone=europe-west1-c --machine-type=n1-standard-1 --subnet=mynetwork --private-network-ip=10.132.0.2 --network-tier=PREMIUM --maintenance-policy=MIGRATE --service-account=567764395026-compute@developer.gserviceaccount.com scopes=https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/trace.append --image=debian-9-stretch-v20200902 --image-project=debian-cloud --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=mynet-eu-vm --reservation-affinity=any
+
+      gcloud beta compute --project=qwiklabs-gcp-03-12714944c726 instances create managementnet-us-vm --zone=us-central1-c --machine-type=f1-micro --subnet=managementsubnet-us --network-tier=PREMIUM --maintenance-policy=MIGRATE --service-account=567764395026-compute@developer.gserviceaccount.com --scopes=https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/trace.append --image=debian-9-stretch-v20200902 --image-project=debian-cloud --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=managementnet-us-vm --reservation-affinity=any
+
+    gcloud compute instances create privatenet-us-vm --zone=us-central1-c --machine-type=f1-micro --subnet=privatesubnet-us
 
 4. Exploring Cloud Monitoring to Manage Virtual Machines
 
