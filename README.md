@@ -1,13 +1,15 @@
 ## Google Associate Cloud Engineer Course Work
 
 ### This project aims at creation cloud service take advantage of the Google Cloud Platform Capabilities. Through this project, will demonstrate how we organize, development and deploy a cloud-based service by:
-<ol>
-    <li>	Creating a project for a business initiative. </li>
-    <li>(2)	Adding the roles, service accounts and associating them to business stakeholders.</li>
-    <li>(3)	Allocating project resources, and </li>
-    <li>(4)	Deploying the resources to execute the business service.</li>
-    <li>(5)     Monitoring the project resources.</li>
-</ol>
+<section>
+    <ol>
+        <li>	Creating a project for a business initiative. </li>
+        <li> (2)	Adding the roles, service accounts and associating them to business stakeholders.</li>
+        <li> (3)	Allocating project resources, and </li>
+        <li> (4)	Deploying the resources to execute the business service.</li>
+        <li> (5)     Monitoring the project resources.</li>
+    </ol>
+</section>
 ## In order to reach former project milestones, I ‘will explore multiple GCP capabilities such as: 
 
     (1)	Cloud IAM – Cloud Resource Management 
@@ -99,5 +101,6 @@
 
 5. 
   
-
+<div>
 <iframe src="https://sway.office.com/4BtzRKl7L5fVbrD6?ref=Link"></iframe>
+</div>
