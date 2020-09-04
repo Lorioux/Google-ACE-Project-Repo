@@ -10,6 +10,7 @@
         <li> Monitoring the project resources.</li>
     </ol>
 </section>
+
 ### In order to reach former project milestones, I ‘will explore multiple GCP capabilities such as: 
 
     
