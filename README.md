@@ -47,9 +47,9 @@ In order to reach former project milestones, I ‘will explore multiple GCP capa
       
       i)  Exploring default network ( deleting and adding firewall rules)
       
-      declare -a rules=("$( gcloud compute firewall-rules list --format='table(name)')")
-      for r in $rules[@]; do
-          $(gcloud compute firewall-rules $r --quiet)
+      declare -a rules=("$( gcloud compute firewall-rules list --format='table(name)')");
+      for r in $rules; do
+          gcloud compute firewall-rules delete $r --quiet;
       done;
       for n in $nets; do  if [[ "$index" -eq "0" ]]; then    $index = $index + 1;  else     $index = $index + 1;     echo $n; fi; done
       gcloud compute --project=qwiklabs-gcp-03-12714944c726 firewall-rules create NAME --direction=INGRESS --priority=1000 --       network=mynetwork --action=ALLOW --rules=PROTOCOL:PORT,...
