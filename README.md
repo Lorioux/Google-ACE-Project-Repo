@@ -10,9 +10,9 @@ This project aims at creation cloud service take advantage of the Google Cloud P
 
 In order to reach former project milestones, I ‘will explore multiple GCP capabilities such as: 
 
-    (1)	Cloud IAM – Configuring Identity and Access Management
+    (1)	Cloud IAM – Cloud Resource Management 
     (2)	Virtual Private Cloud (VPC) Networking – Configuring Networks, Firewall and LoadBalancers
-    (3)	Compute Engine – Virtual Machines (VM) Provisioning
+    (3)	Compute Engine – Cloud Computing with Virtual Machines (VM)
     (4)	Cloud Monitoring – VM Monitoring
     (5)	Cloud Marketplaces – Third-party resources exploration
     (6)	Deployment Manager
@@ -45,8 +45,9 @@ In order to reach former project milestones, I ‘will explore multiple GCP capa
 2. Network Management with VPC Networks
 
   To ensure communication and accessibility of business service to in- and out-side world, a virtual computer network (VPC) is required. Therefore, we create VPC Networks inside for the project for internal and external connectivity. Though the networks will provide other resources like Virtual Machine and Applications with the needed Local and Global Internet Protocols (IP) Address.
+      i) 
 
-3. Allocating Computing Resources (Virtual Machines) with Compute Engine
+3. Cloud Computing Resources (Virtual Machines) with Compute Engine
 
   Like bare steel server hosted in-premisse, we rely on server running on Virtual Machines. The GCP Compute  Engine resource enable the creation on VM Instances as one would need to deploy web servers, application server, etc.    
 
