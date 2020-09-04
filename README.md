@@ -1,14 +1,14 @@
-Google Associate Cloud Engineer Course Work
+## Google Associate Cloud Engineer Course Work
 
-This project aims at creation cloud service take advantage of the Google Cloud Platform Capabilities. Through this project, will demonstrate how we organize, development and deploy a cloud-based service by:
-
-    (1)	Creating a project for a business initiative.
-    (2)	Adding the roles, service accounts and associating them to business stakeholders.
-    (3)	Allocating project resources, and 
-    (4)	Deploying the resources to execute the business service.
-    (5)     Monitoring the project resources.
-
-In order to reach former project milestones, I ‘will explore multiple GCP capabilities such as: 
+### This project aims at creation cloud service take advantage of the Google Cloud Platform Capabilities. Through this project, will demonstrate how we organize, development and deploy a cloud-based service by:
+<ol>
+    <li>	Creating a project for a business initiative. </li>
+    <li>(2)	Adding the roles, service accounts and associating them to business stakeholders.</li>
+    <li>(3)	Allocating project resources, and </li>
+    <li>(4)	Deploying the resources to execute the business service.</li>
+    <li>(5)     Monitoring the project resources.</li>
+</ol>
+## In order to reach former project milestones, I ‘will explore multiple GCP capabilities such as: 
 
     (1)	Cloud IAM – Cloud Resource Management 
     (2)	Virtual Private Cloud (VPC) Network – Configuring Networks, subnetworks, Firewall and Routes
@@ -23,9 +23,9 @@ In order to reach former project milestones, I ‘will explore multiple GCP capa
     (11)    Google Cloud Boot
 
 
-1.	Project Access Management with Cloud IAM
+### 1.	Project Access Management with Cloud IAM
 
-  As any business initiative need to be protected for non-authorized stakeholders, the cloud-based project (initiative)is handled similarly. Only affected – most directly affected stakeholders - need to have adequate minimal authorization level to access project information and resources. Herein, we apply the same principle for this demo project by:
+  #### As any business initiative need to be protected for non-authorized stakeholders, the cloud-based project (initiative)is handled similarly. Only affected – most directly affected stakeholders - need to have adequate minimal authorization level to access project information and resources. Herein, we apply the same principle for this demo project by:
   
     i)    Setting up stakeholder(users) roles
     ii)   Setting up the Service Accounts
@@ -41,9 +41,9 @@ In order to reach former project milestones, I ‘will explore multiple GCP capa
         gcloud beta compute --project=qwiklabs-gcp-01-586709e6acad instances create demoiam --zone=us-central1-c --machine-type=f1-micro --subnet=default --network-tier=PREMIUM --maintenance-policy=MIGRATE --service-account=read-bucket-objects@qwiklabs-gcp-01-586709e6acad.iam.gserviceaccount.com --scopes=https://www.googleapis.com/auth/cloud-platform --image=debian-9-stretch-v20200902 --image-project=debian-cloud --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=demoiam --reservation-affinity=any
 
 
-2. Network Management with VPC Networks
+### 2. Network Management with VPC Networks
 
-  To ensure communication and accessibility of business service to in- and out-side world, a virtual computer network (VPC) is required. Google Cloud Virtual Private Cloud (VPC) provides networking functionality to Compute Engine virtual machine (VM) instances, Kubernetes Engine containers, and the App Engine flexible environment. In other words, without a VPC network, you cannot create VM instances, containers, or App Engine applications. A VPC network is a global resource that consists of a list of regional virtual subnetworks (subnets) in data centers, all connected by a global wide area network (WAN). VPC networks are logically isolated from each other in Google Cloud. We aim at exploring defaut, auto and customizable networking capabilities by:
+  #### To ensure communication and accessibility of business service to in- and out-side world, a virtual computer network (VPC) is required. Google Cloud Virtual Private Cloud (VPC) provides networking functionality to Compute Engine virtual machine (VM) instances, Kubernetes Engine containers, and the App Engine flexible environment. In other words, without a VPC network, you cannot create VM instances, containers, or App Engine applications. A VPC network is a global resource that consists of a list of regional virtual subnetworks (subnets) in data centers, all connected by a global wide area network (WAN). VPC networks are logically isolated from each other in Google Cloud. We aim at exploring defaut, auto and customizable networking capabilities by:
       
       i)  Exploring default network ( deleting and adding firewall rules)
       
@@ -100,5 +100,4 @@ In order to reach former project milestones, I ‘will explore multiple GCP capa
 5. 
   
 
-
-https://sway.office.com/4BtzRKl7L5fVbrD6?ref=Link
+<iframe src="https://sway.office.com/4BtzRKl7L5fVbrD6?ref=Link"></iframe>
