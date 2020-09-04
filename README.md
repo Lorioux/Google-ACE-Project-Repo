@@ -72,46 +72,6 @@ In order to reach former project milestones, I ‘will explore multiple GCP capa
 
     gcloud compute firewall-rules create mynetwork-allow-ssh --project=qwiklabs-gcp-03-12714944c726 --network=projects/qwiklabs-gcp-03-12714944c726/global/networks/mynetwork --description=Allows\ TCP\ connections\ from\ any\ source\ to\ any\ instance\ on\ the\ network\ using\ port\ 22. --direction=INGRESS --priority=65534 --source-ranges=0.0.0.0/0 --action=ALLOW --rules=tcp:22
     
-    {
-      "autoCreateSubnetworks": True,
-      "creationTimestamp": "2020-09-04T09:50:53.266-07:00",
-      "description": "",
-      "id": "915106178311114370",
-      "kind": "compute#network",
-      "name": "mynetwork",
-      "routingConfig": {
-        "routingMode": "REGIONAL"
-      },
-      "selfLink": "projects/qwiklabs-gcp-03-12714944c726/global/networks/mynetwork",
-      "subnetworks": [
-        "projects/qwiklabs-gcp-03-12714944c726/regions/europe-west1/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/us-east1/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/asia-southeast2/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/us-west4/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/us-west3/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/europe-north1/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/asia-northeast3/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/europe-west4/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/europe-west2/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/northamerica-northeast1/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/asia-east1/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/us-west2/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/europe-west3/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/us-west1/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/us-central1/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/asia-northeast2/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/asia-east2/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/asia-southeast1/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/australia-southeast1/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/southamerica-east1/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/europe-west6/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/us-east4/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/asia-northeast1/subnetworks/mynetwork",
-        "projects/qwiklabs-gcp-03-12714944c726/regions/asia-south1/subnetworks/mynetwork"
-      ]
-    }
-    
-    
     
       
       ii) Creating custom mode networks
