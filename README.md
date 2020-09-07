@@ -93,9 +93,14 @@
             gcloud compute networks create privatenet --subnet-mode=custom
             gcloud compute networks subnets create privatesubnet-us --network=privatenet --region=us-central1 --range=172.16.0.0/24
             gcloud compute networks subnets create privatesubnet-eu --network=privatenet --region=europe-west1 --range=172.20.0.0/20
+            
+### 3. Networing Services - Configuring Network Loadbalancers
+
+3.1 
 
 
-### 3. Cloud Computing Provisioning (Virtual Machines) with Compute Engine
+
+### 4. Cloud Computing Provisioning (Virtual Machines) with Compute Engine
 
   Like bare steel server hosted in-premisse, we rely on server running on Virtual Machines. The GCP Compute  Engine resource enable the creation on VM Instances as one would need to deploy web servers, application server, etc.
   
@@ -106,7 +111,7 @@
         gcloud compute instances create privatenet-us-vm --zone=us-central1-c --machine-type=f1-micro --subnet=privatesubnet-us
 
 
-3.1 Create a Windows virtual machine
+4.1 Create a Windows virtual machine
 
       gcloud beta compute --project=qwiklabs-gcp-04-4dcede347b44 instances create instance-2 --zone=europe-west2-a --machine-type=n1-standard-1 --subnet=default --network-tier=PREMIUM --maintenance-policy=MIGRATE --service-account=549175800403-compute@developer.gserviceaccount.com --scopes=https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/trace.append --tags=http-server,https-server --image=windows-server-2016-dc-core-v20200813 --image-project=windows-cloud --boot-disk-size=100GB --boot-disk-type=pd-ssd --boot-disk-device-name=instance-2 --no-shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --reservation-affinity=any
 
@@ -114,11 +119,11 @@
 
       gcloud compute --project=qwiklabs-gcp-04-4dcede347b44 firewall-rules create default-allow-https --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:443 --source-ranges=0.0.0.0/0 --target-tags=https-server
       
-3.2 Create a custom virtual machine
+4.2 Create a custom virtual machine
 
       gcloud beta compute --project=qwiklabs-gcp-04-4dcede347b44 instances create instance-3 --zone=us-west1-b --machine-type=custom-6-32768 --subnet=default --network-tier=PREMIUM --maintenance-policy=MIGRATE --service-account=549175800403-compute@developer.gserviceaccount.com --scopes=https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/trace.append --image=debian-9-stretch-v20200902 --image-project=debian-cloud --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=instance-3 --reservation-affinity=any
 
-3.3 Working with Virtual Machines
+4.3 Working with Virtual Machines
    i) Create VM with Storage Read/Write
    
         gcloud beta compute --project=qwiklabs-gcp-00-54bac0684c8d instances create mc-server --zone=us-central1-a --machine-type=e2-medium --subnet=default --address=34.72.175.28 --network-tier=PREMIUM --maintenance-policy=MIGRATE --service-account=514643164481-compute@developer.gserviceaccount.com --scopes=https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/trace.append,https://www.googleapis.com/auth/devstorage.read_write --tags=minecraft-server --image=debian-9-stretch-v20200902 --image-project=debian-cloud --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=mc-server --create-disk=mode=rw,size=50,type=projects/qwiklabs-gcp-00-54bac0684c8d/zones/us-central1-a/diskTypes/pd-ssd,name=minecraft-disk,device-name=minecraft-disk --reservation-affinity=any
@@ -202,16 +207,16 @@
       ## Instead of following the manual process to mount the persistent disk and launch the server application in a screen, use metadata scripts to create a startup script and a shutdown script to do this for you.
       gcloud compute instances add-metadata mc-server --metadata="startup-script-url='https://storage.googleapis.com/cloud-training/archinfra/mcserver/startup.sh'; shutdown-script-url='https://storage.googleapis.com/cloud-training/archinfra/mcserver/shutdown.sh'"
 
-### 4. Exploring Cloud Monitoring to Manage Virtual Machines
+### 5. Exploring Cloud Monitoring to Manage Resources
 
-4.1 Create a Cloud Monitoring workspace
+5.1 Create a Cloud Monitoring workspace
 
    ## 
 
 
  
  
-### 5. 
+### 6. 
   
 <div>
     <iframe src="https://sway.office.com/4BtzRKl7L5fVbrD6?ref=Link"></iframe>
