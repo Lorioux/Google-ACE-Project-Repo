@@ -36,7 +36,7 @@
    #### ii)   Setting up the Service Accounts
    #### iii)  Binding Members to the Service Accounts and Roles
    
-            gcloud iam service-accounts create read-bucket-objects 
+        gcloud iam service-accounts create read-bucket-objects 
         
    #### iv)   Creating a VM with the Service Account User
 
