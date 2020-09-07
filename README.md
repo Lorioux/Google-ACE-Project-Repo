@@ -96,7 +96,34 @@
             
 ### 3. Networing Services - Configuring Network Loadbalancers
 
-3.1 
+3.1 Configure a health-check firewall
+      
+      gcloud compute firewall-rules create fw-allow-health-checks --network=default --target-tags=allow-health-checks --source-ranges="130.211.0.0/22,35.191.0.0/16" --rules="tcp:80" --direction="IN" --action=ALLOW
+
+3.2 Create the Cloud Router instance
+
+      gcloud compute routers create nat-router-us-central1 --network=default --region=us-central1
+
+      gcloud compute routers nats create nat-config --region=us-central1 --router=nat-router-us-central1 --auto-allocate-nat-external-ips --nat-primary-subnet-ip-ranges
+      
+3.3 Binding the network configuration to a VM
+
+      gcloud beta compute --project=qwiklabs-gcp-47fa3e3ff8a1797a instances create webservers --zone=us-central1-a --machine-type=f1-micro --subnet=default --no-address --maintenance-policy=MIGRATE --service-account=374712980416-compute@developer.gserviceaccount.com --scopes=https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/trace.append --tags=allow-health-checks --image=debian-9-stretch-v20200902 --image-project=debian-cloud --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=webservers --reservation-affinity=any
+
+      ## Customize the VM
+      cloud compute ssh webservers --zone=us-central1-a --dry-run && cloud compute ssh webservers --zone=us-central1-a &&
+      
+      ## To install Apache2, run the following commands:
+      sudo apt-get update && sudo apt-get install -y apache2 && 
+      
+      ## To start the Apache server, run the following command:
+      sudo service apache2 start
+      
+      ## Create custom Image
+      gcloud compute images create mywebserver --project=qwiklabs-gcp-47fa3e3ff8a1797a --source-disk=webservers --source-disk-zone=us-central1-a --storage-location=us
+      
+      ##
+3.4 Configure the HTTP load balancer
 
 
 
@@ -206,7 +233,23 @@
       
       ## Instead of following the manual process to mount the persistent disk and launch the server application in a screen, use metadata scripts to create a startup script and a shutdown script to do this for you.
       gcloud compute instances add-metadata mc-server --metadata="startup-script-url='https://storage.googleapis.com/cloud-training/archinfra/mcserver/startup.sh'; shutdown-script-url='https://storage.googleapis.com/cloud-training/archinfra/mcserver/shutdown.sh'"
+      
+      
+4.4 Configure an instance template and create instance groups
 
+   i) Configure the instance template
+   
+      gcloud beta compute --project=qwiklabs-gcp-47fa3e3ff8a1797a instance-templates create mywebserver-template --machine-type=f1-micro --subnet=projects/qwiklabs-gcp-47fa3e3ff8a1797a/regions/us-central1/subnetworks/default --no-address --maintenance-policy=MIGRATE --service-account=374712980416-compute@developer.gserviceaccount.com --scopes=https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/trace.append --region=us-central1 --tags=allow-health-checks --image=mywebserver --image-project=qwiklabs-gcp-47fa3e3ff8a1797a --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=mywebserver-template --reservation-affinity=any
+      
+   ii) Create the managed instance groups in us and europe from template, and set the Load balancer and healthchecks.
+   
+      gcloud compute --project "qwiklabs-gcp-47fa3e3ff8a1797a" health-checks create tcp "http-health-check" --timeout "1" --check-interval "60" --unhealthy-threshold "3" --healthy-threshold "2" --port "80"
+
+      gcloud beta compute --project=qwiklabs-gcp-47fa3e3ff8a1797a instance-groups managed create us-central1-mig --base-instance-name=us-central1-mig --template=mywebserver-template --size=1 --zones=us-central1-b,us-central1-c,us-central1-f --instance-redistribution-type=PROACTIVE --health-check=http-health-check --initial-delay=300
+
+      gcloud beta compute --project "qwiklabs-gcp-47fa3e3ff8a1797a" instance-groups managed set-autoscaling "us-central1-mig" --region "us-central1" --cool-down-period "60" --max-num-replicas "2" --min-num-replicas "1" --target-load-balancing-utilization "0.8" --mode "on"
+
+  
 ### 5. Exploring Cloud Monitoring to Manage Resources
 
 5.1 Create a Cloud Monitoring workspace
