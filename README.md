@@ -105,8 +105,112 @@
 
         gcloud compute instances create privatenet-us-vm --zone=us-central1-c --machine-type=f1-micro --subnet=privatesubnet-us
 
+
+3.1 Create a Windows virtual machine
+
+      gcloud beta compute --project=qwiklabs-gcp-04-4dcede347b44 instances create instance-2 --zone=europe-west2-a --machine-type=n1-standard-1 --subnet=default --network-tier=PREMIUM --maintenance-policy=MIGRATE --service-account=549175800403-compute@developer.gserviceaccount.com --scopes=https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/trace.append --tags=http-server,https-server --image=windows-server-2016-dc-core-v20200813 --image-project=windows-cloud --boot-disk-size=100GB --boot-disk-type=pd-ssd --boot-disk-device-name=instance-2 --no-shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --reservation-affinity=any
+
+      gcloud compute --project=qwiklabs-gcp-04-4dcede347b44 firewall-rules create default-allow-http --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:80 --source-ranges=0.0.0.0/0 --target-tags=http-server
+
+      gcloud compute --project=qwiklabs-gcp-04-4dcede347b44 firewall-rules create default-allow-https --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:443 --source-ranges=0.0.0.0/0 --target-tags=https-server
+      
+3.2 Create a custom virtual machine
+
+      gcloud beta compute --project=qwiklabs-gcp-04-4dcede347b44 instances create instance-3 --zone=us-west1-b --machine-type=custom-6-32768 --subnet=default --network-tier=PREMIUM --maintenance-policy=MIGRATE --service-account=549175800403-compute@developer.gserviceaccount.com --scopes=https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/trace.append --image=debian-9-stretch-v20200902 --image-project=debian-cloud --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=instance-3 --reservation-affinity=any
+
+3.3 Working with Virtual Machines
+   i) Create VM with Storage Read/Write
+   
+        gcloud beta compute --project=qwiklabs-gcp-00-54bac0684c8d instances create mc-server --zone=us-central1-a --machine-type=e2-medium --subnet=default --address=34.72.175.28 --network-tier=PREMIUM --maintenance-policy=MIGRATE --service-account=514643164481-compute@developer.gserviceaccount.com --scopes=https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/trace.append,https://www.googleapis.com/auth/devstorage.read_write --tags=minecraft-server --image=debian-9-stretch-v20200902 --image-project=debian-cloud --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=mc-server --create-disk=mode=rw,size=50,type=projects/qwiklabs-gcp-00-54bac0684c8d/zones/us-central1-a/diskTypes/pd-ssd,name=minecraft-disk,device-name=minecraft-disk --reservation-affinity=any
+   
+   ii) Prepare the data disk
+      
+      ## Connect to server via SSH and proceed with:
+      gcloud compute ssh mc-server --zone=us-central1-a --quiet
+      
+      ## To create a directory that serves as the mount point for the data disk, run the following command:
+      sudo mkdir -p /home/minecraft &&
+      
+      ## To format the disk, run the following command:
+      sudo mkfs.ext4 -F -E lazy_itable_init=0, lazy_journal_init=0,discard dev/disk/by-id/google-minecraft-disk      && 
+      
+      ## To mount the disk, run the following command:
+      sudo mount -o discard,defaults /dev/disk/by-id/google-minecraft-disk /home/minecraft &&
+      
+      
+   iii) Install and run the Application
+   
+       ## Install the Java Runtime Environment (JRE) and the Minecraft server
+       sudo apt-get update &&
+       sudo apt-get install -y default-jre-headless &&
+       
+       ##To navigate to the directory where the persistent disk is mounted, run the following command:
+       cd /home/minecraft && 
+       
+       ##  Install wget, run the following command:
+       sudo apt-get install wget -y && 
+       ## Download the current Minecraft server JAR file (1.11.2 JAR), run the following command:
+       sudo wget https://launcher.mojang.com/v1/objects/d0d0fe2b1dc6ab4c65554cb734270872b72dadd6/server.jar
+       &&
+       
+       ## To initialize the Minecraft server, run the following command:
+       sudo java -Xmx1024M -Xms1024M -jar server.jar nogui &&
+       
+       ## Open and edit the the EULA, run the following command:
+       sudo nano eula.txt 
+       ## Change the last line of the file from eula=false to eula=true
+       
+       
+   iV) Allow client traffic with Firewall rule
+   
+       gcloud compute --project=qwiklabs-gcp-00-54bac0684c8d firewall-rules create minecraft-rule --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:25565 --source-ranges=0.0.0.0/0 --target-tags=minecraft-server
+   
+   v) Schedule regular backups
+      ## Create a Cloud Storage bucket
+      gcloud compute ssh mc-server --zone=us-central1-a --quiet
+      
+      ## Create a globally unique bucket name, and store it in the environment variable
+      export BUCKET_NAME=mcs-storage
+      
+      ##  create the bucket using the gsutil tool, part of the Cloud SDK, run the following command:
+      gsutil mb gs://$BUCKET_NAME-minecraft-backup
+      
+      ## Create a backup script file
+      cd /home/minecraft
+      
+      ##backup.sh
+         #!/bin/bash
+         screen -r mcs -X stuff '/save-all\n/save-off\n'
+         /usr/bin/gsutil cp -R ${BASH_SOURCE%/*}/world gs://${BUCKET_NAME}-minecraft-backup/$(date "+%Y%m%d-%H%M%S")-world
+         screen -r mcs -X stuff '/save-on\n'
+      
+      ## set as executable
+      sudo chmod 755 /home/minecraft/backup.sh
+      
+      ## Execute 
+      . /home/minecraft/backup.sh
+      
+      ## Open the cron table for editing:
+      sudo crontab -e
+      
+      ## Select the file editor tool
+      ## Add this command as last line, to ensure the cron tab execute a backup in every 4 hours
+      0 */4 * * * /home/minecraft/backup.sh
+      
+   vi) Automating server maintenance
+      
+      ## Instead of following the manual process to mount the persistent disk and launch the server application in a screen, use metadata scripts to create a startup script and a shutdown script to do this for you.
+      gcloud compute instances add-metadata mc-server --metadata="startup-script-url='https://storage.googleapis.com/cloud-training/archinfra/mcserver/startup.sh'; shutdown-script-url='https://storage.googleapis.com/cloud-training/archinfra/mcserver/shutdown.sh'"
+
 ### 4. Exploring Cloud Monitoring to Manage Virtual Machines
 
+4.1 Create a Cloud Monitoring workspace
+
+   ## 
+
+
+ 
+ 
 ### 5. 
   
 <div>
