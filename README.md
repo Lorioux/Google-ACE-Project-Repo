@@ -53,6 +53,7 @@
           for r in $rules; do 
               gcloud compute firewall-rules delete $r --quiet;
           done;
+          index=0;
           for n in $nets; do  
               if [[ "$index" -eq "0" ]]; then    
                  $index = $index + 1; 
@@ -61,7 +62,7 @@
                  echo $n; 
               fi; 
           done
-          gcloud compute --project=qwiklabs-gcp-03-12714944c726 firewall-rules create NAME --direction=INGRESS --priority=1000 --       network=mynetwork --action=ALLOW --rules=PROTOCOL:PORT,...
+          gcloud compute --project=qwiklabs-gcp-03-12714944c726 firewall-rules create NAME --direction=INGRESS --priority=1000 --network=mynetwork --action=ALLOW --rules=PROTOCOL:PORT,...
     
           gcloud compute --project=qwiklabs-gcp-03-12714944c726 firewall-rules create managementnet-allow-icmp-ssh-rdp --direction=INGRESS --priority=1000 --network=managementnet --action=ALLOW --rules=tcp:22,tcp:3389,icmp --source-ranges=0.0.0.0/0
       
