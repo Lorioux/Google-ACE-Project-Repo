@@ -19,7 +19,7 @@
         <li> Virtual Private Cloud (VPC) Network – Configuring Networks, subnetworks, Firewall and Routes </li>
         <li> Networing Services - Configuring Network Loadbalancers </li>
         <li> Compute Engine – Cloud Computing with Virtual Machines (VM) </li>
-        <li> Cloud Monitoring – VM Monitoring </li>
+        <li> Cloud Monitoring – Cloud Resources Management </li>
         <li> Cloud Marketplaces – Third-party resources exploration </li>
         <li> Deployment Manager </li>
         <li> Cloud SQL and BigQuery – Data Management </li>
@@ -127,7 +127,7 @@
       
       ##
 3.4 Configure the HTTP load balancer
-
+      
 
 
 ### 4. Cloud Computing Provisioning (Virtual Machines) with Compute Engine
@@ -263,8 +263,178 @@
 
  
  
-### 6. 
+### 6. Cloud SQL and BigQuery – Data Management
+6.1 Create a Namespace for Kubernetes
+     
+ i) create a production namespace
+     export zone=us-central1-a
+     export cluster=std-cluster-1
+     
+     ## create the cloud cluster
+     gcloud container clusters create $cluster --num-nodes=3 --enable-ip-alias --zone=$zone 
+     
+     ## configure access to clusters for kebectl tool.
+     gcloud container clusters get-credentials $my_cluster --zone $my_zone
+     
+ ii) Create a Resource in a Namespace 
+ 
+      ## create a configuration file for kubernetes pods named: /my-pod.yaml
+      apiVersion: v1
+      kind: Pod
+      metadata:
+        name: nginx
+        labels:
+          name: nginx
+      spec:
+        containers:
+        - name: nginx
+          image: nginx
+          ports:
+          - containerPort: 80
+          
+      ## create a resource within the namespace
+      kubectl apply -f ./my-pod.yaml --namespace=production
+     
+ iii) Configure Roles to Kubernetes access control
+ 
+      ## create a role configuration template named: /pod-reader-role.yaml within the namespace
+      kind: Role
+      apiVersion: rbac.authorization.k8s.io/v1
+      metadata:
+        namespace: production
+        name: pod-reader
+      rules:
+      - apiGroups: [""]
+        resources: ["pods"]
+        verbs: ["create", "get", "list", "watch"]
+        
+      ## create a custom Role based on the users email
+      kubectl create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user [USERNAME_1_EMAIL]
+      
+      ## execute the following command to create the role:
+      kubectl apply -f pod-reader-role.yaml
+      
+   iV) Create a RoleBinding to bind to a user
+      
+         ## create a rolebinding configuration template named: username2-editor-binding.yaml 
+         kind: RoleBinding
+         apiVersion: rbac.authorization.k8s.io/v1
+         metadata:
+           name: username2-editor
+           namespace: production
+         subjects:
+         - kind: User
+           name: [USERNAME_2_EMAIL]
+           apiGroup: rbac.authorization.k8s.io
+         roleRef:
+           kind: Role
+           name: pod-reader
+           apiGroup: rbac.authorization.k8s.io
+           
+       ## set the user for this role
+       export USER2=[USERNAME_2_EMAIL]
+       
+       ## replace the value [..] in role configuration file with the actual user email, using command <sed>
+       sed -i "s/\[USERNAME_2_EMAIL\]/${USER2}/" username2-editor-binding.yaml
+       
+       ## apply role 
+       kubectl apply -f username2-editor-binding.yaml
+       
+ 6.2 Create and Use Pod Security Policies
+ 
+ i) Create a Pod Security Policy
+      
+      ##  create a Pod Security Policy using the restricted-psp.yaml
+      apiVersion: policy/v1beta1
+      kind: PodSecurityPolicy
+      metadata:
+        name: restricted-psp
+      spec:
+        privileged: false  # Don't allow privileged pods!
+        seLinux:
+          rule: RunAsAny
+        supplementalGroups:
+          rule: RunAsAny
+        runAsUser:
+          rule: MustRunAsNonRoot
+        fsGroup:
+          rule: RunAsAny
+        volumes:
+        - '*'
+        
+     ## create the Pod Security Policy by executing the following command: 
+     kubectl apply -f restricted-psp.yaml
+     
+  ii) Create a ClusterRole to a Pod Security Policy
+      
+      ## creates a ClusterRole that includes the resource from <psp-cluster-role.yaml> based on the policy created above
+      kind: ClusterRole
+      apiVersion: rbac.authorization.k8s.io/v1
+      metadata:
+        name: restricted-pods-role
+      rules:
+      - apiGroups:
+        - extensions
+        resources:
+        - podsecuritypolicies
+        resourceNames:
+        - restricted-psp
+        verbs:
+        - use
+   
+      ## create the role 
+      kubectl create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user [USERNAME_1_EMAIL]
+      
+      ## create the ClusterRole with access to the security policy, execute the following command:
+      kubectl apply -f psp-cluster-role.yaml
+      
+  iii) Create a ClusterRoleBinding for the Pod Security Policy
   
+      ## the file psp-cluster-role-binding.yaml binds the <restricted-pods-role> to the <system:serviceaccounts> group in the default Namespace.
+      apiVersion: rbac.authorization.k8s.io/v1
+      kind: RoleBinding
+      metadata:
+        name: restricted-pod-rolebinding
+        namespace: default
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: restricted-pods-role
+      subjects:
+      # Example: All service accounts in default namespace
+      - apiGroup: rbac.authorization.k8s.io
+        kind: Group
+        name: system:serviceaccounts
+        
+      ##  bind the restricted-pods-role ClusterRole to the serviceaccounts group in the default namespace, execute the following command:
+     kubectl apply -f psp-cluster-role-binding.yaml
+     
+iv) Activate Security Policy
+
+      ## execute the following command to enable the PodSecurityPolicy controller:
+      gcloud beta container clusters update $my_cluster --zone $my_zone --enable-pod-security-policy
+      
+      ## The PodSecurityPolicy controller, can be disabled by running this command:
+         # gcloud beta container clusters update [CLUSTER_NAME] --no-enable-pod-security-policy
+                  
+ v) Testing the Pod Security Policy
+      
+      ## create a sample Pod manifest called privileged-pod.yaml
+      kind: Pod
+      apiVersion: v1
+      metadata:
+        name: privileged-pod
+      spec:
+        containers:
+          - name: privileged-pod
+            image: nginx
+            securityContext:
+              privileged: true
+              
+     ## To attempt to run the privileged Pod, execute the following command:
+     kubectl apply -f privileged-pod.yaml
+     
+ 
 <div>
     <iframe src="https://sway.office.com/4BtzRKl7L5fVbrD6?ref=Link"></iframe>
 </div>
