@@ -15,17 +15,17 @@
 
     
    <ol>
-        <li>(1)	Cloud IAM – Cloud Resource Management </li>
-        <li>(2)	Virtual Private Cloud (VPC) Network – Configuring Networks, subnetworks, Firewall and Routes </li>
-        <li>(3) Networing Services - Configuring Network Loadbalancers </li>
-        <li>(4)	Compute Engine – Cloud Computing with Virtual Machines (VM) </li>
-        <li>(5)	Cloud Monitoring – VM Monitoring </li>
-        <li>(6)	Cloud Marketplaces – Third-party resources exploration </li>
-        <li>(7)	Deployment Manager </li>
-        <li>(8)	Cloud SQL and BigQuery – Data Management </li>
-        <li>(9)	Cloud Functions – Running Serverless Functions  </li>
-        <li>(10)	Google Kubernetes Engine </li>
-        <li>(11)    Google Cloud Boot </li>
+        <li>Cloud IAM – Cloud Resource Management </li>
+        <li>Virtual Private Cloud (VPC) Network – Configuring Networks, subnetworks, Firewall and Routes </li>
+        <li>Networing Services - Configuring Network Loadbalancers </li>
+        <li>Compute Engine – Cloud Computing with Virtual Machines (VM) </li>
+        <li>Cloud Monitoring – VM Monitoring </li>
+        <li>Cloud Marketplaces – Third-party resources exploration </li>
+        <li>Deployment Manager </li>
+        <li>Cloud SQL and BigQuery – Data Management </li>
+        <li>Cloud Functions – Running Serverless Functions  </li>
+        <li>Google Kubernetes Engine </li>
+        <li>Google Cloud Boot </li>
     </ol>
 
 ### 1.	Project Access Management with Cloud IAM
