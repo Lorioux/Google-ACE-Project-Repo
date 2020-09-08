@@ -435,6 +435,3 @@ iv) Activate Security Policy
      kubectl apply -f privileged-pod.yaml
      
  
-<div>
-    <iframe src="https://sway.office.com/BJBgGiHooe91PL1k?ref=Link"></iframe>
-</div>
