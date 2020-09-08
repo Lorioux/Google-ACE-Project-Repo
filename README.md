@@ -47,15 +47,18 @@
 
   To ensure communication and accessibility of business service to in- and out-side world, a virtual computer network (VPC) is required. Google Cloud Virtual Private Cloud (VPC) provides networking functionality to Compute Engine virtual machine (VM) instances, Kubernetes Engine containers, and the App Engine flexible environment. In other words, without a VPC network, you cannot create VM instances, containers, or App Engine applications. A VPC network is a global resource that consists of a list of regional virtual subnetworks (subnets) in data centers, all connected by a global wide area network (WAN). VPC networks are logically isolated from each other in Google Cloud. We aim at exploring defaut, auto and customizable networking capabilities by:
      
-   #### i)  Exploring default network ( deleting and adding firewall rules)</p>
+   #### i)  Exploring default network ( deleting and adding firewall rules)
        
+          ## create an array of firewall rules name 
           declare -a rules=("$( gcloud compute firewall-rules list --format='table(name)')");
+        
+          ## delete a firewall rules
           for r in $rules; do 
               gcloud compute firewall-rules delete $r --quiet;
           done;
           index=0;
           for n in $nets; do  
-              if [[ "$index" -eq "0" ]]; then    
+              if [ "$index" -eq "0" ]; then    
                  $index = $index + 1; 
               else     
                  $index = $index + 1;     
