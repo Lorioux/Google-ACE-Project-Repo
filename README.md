@@ -15,17 +15,17 @@
 
     
    <ol>
-        <li>Cloud IAM – Cloud Resource Management </li>
-        <li>Virtual Private Cloud (VPC) Network – Configuring Networks, subnetworks, Firewall and Routes </li>
-        <li>Networing Services - Configuring Network Loadbalancers </li>
-        <li>Compute Engine – Cloud Computing with Virtual Machines (VM) </li>
-        <li>Cloud Monitoring – VM Monitoring </li>
-        <li>Cloud Marketplaces – Third-party resources exploration </li>
-        <li>Deployment Manager </li>
-        <li>Cloud SQL and BigQuery – Data Management </li>
-        <li>Cloud Functions – Running Serverless Functions  </li>
-        <li>Google Kubernetes Engine </li>
-        <li>Google Cloud Boot </li>
+        <li> Cloud IAM – Cloud Resource Management </li>
+        <li> Virtual Private Cloud (VPC) Network – Configuring Networks, subnetworks, Firewall and Routes </li>
+        <li> Networing Services - Configuring Network Loadbalancers </li>
+        <li> Compute Engine – Cloud Computing with Virtual Machines (VM) </li>
+        <li> Cloud Monitoring – VM Monitoring </li>
+        <li> Cloud Marketplaces – Third-party resources exploration </li>
+        <li> Deployment Manager </li>
+        <li> Cloud SQL and BigQuery – Data Management </li>
+        <li> Cloud Functions – Running Serverless Functions  </li>
+        <li> Google Kubernetes Engine </li>
+        <li> Google Cloud Boot </li>
     </ol>
 
 ### 1.	Project Access Management with Cloud IAM
@@ -60,8 +60,7 @@
           for n in $nets; do  
               if [ "$index" -eq "0" ]; then    
                  $index = $index + 1; 
-              else     
-                 $index = $index + 1;     
+              else         
                  echo $n; 
               fi; 
           done
@@ -197,11 +196,12 @@
        ## Change the last line of the file from eula=false to eula=true
        
        
-   iV) Allow client traffic with Firewall rule
+   iv) Allow client traffic with Firewall rule
    
        gcloud compute --project=qwiklabs-gcp-00-54bac0684c8d firewall-rules create minecraft-rule --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:25565 --source-ranges=0.0.0.0/0 --target-tags=minecraft-server
    
    v) Schedule regular backups
+   
       ## Create a Cloud Storage bucket
       gcloud compute ssh mc-server --zone=us-central1-a --quiet
       
