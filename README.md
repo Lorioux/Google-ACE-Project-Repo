@@ -126,8 +126,38 @@
       gcloud compute images create mywebserver --project=qwiklabs-gcp-47fa3e3ff8a1797a --source-disk=webservers --source-disk-zone=us-central1-a --storage-location=us
       
       ##
-3.4 Configure the HTTP load balancer
+3.4 Configuring an HTTP Load Balancer with Cloud Armor
+
+i) Create the health check rule
       
+      ## create firewall rule
+      gcloud compute firewall-rules create fw-allow-health-checks --priority=1000 --allow tcp:80 --source-ranges 130.211.0.0/22,35.191.0.0/16 --direction IN --network default --target-tags allow-health-checks
+      
+ii) Create the Cloud Router instance
+   
+      ## create cloud routers for us-central1 and europe-west1 region
+      gcloud compute routers create nat-router-us-central1 --region=us-central1 --network default
+      gcloud compute routers create nat-router-europe-west1 --region=europe-west1 --network default
+      
+      ## create the nats for us-central1 and europe-west1 region
+      gcloud compute routers nats create nat-usa  --router nat-router-us-central1 --auto-allocate-nat-external-ips --nat-primary-subnet-ip-ranges --region=us-central1  --quiet &
+      gcloud compute routers nats create nat-europe --router nat-router-europe-west1  --auto-allocate-nat-external-ips --nat-primary-subnet-ip-ranges --region=europe-west1 --quiet
+      
+iii) Configure an instance template and create instance groups
+
+      ## Configure the instance template
+      gcloud compute instance-templates create us-central1-template --metadata="startup-script-url='gs://cloud-training/gcpnet/httplb/startup.sh'" --network=default --region=us-central1 --no-address --tags=allow-health-checks
+      
+      ## use the instance templeate for instance gropus
+      gcloud compute instance-groups managed create us-central1-mig --size 1 --template us-central1-template --instance-redistribution-type PROACTIVE --region us-central1 --zones=us-central1-b,us-central1-c,us-central1-f
+      
+      gcloud compute instance-groups managed create europe-west1-mig  --size 1 --template europe-west1-template --instance-redistribution-type PROACTIVE --region europe-west1 
+
+      ## Set additional configuration like autoscaling, minim and maximum no. of instances, cool-down-period
+      gcloud compute instance-groups managed set-autoscaling us-central1-mig --cool-down-period 45 --min-num-replicas 1 --max-num-replicas 5 --scale-based-on-cpu --target-cpu-utilization 0.8 --region us-central1
+      
+      gcloud compute instance-groups managed set-autoscaling europe-west1-mig --cool-down-period 45 --min-num-replicas 1 --max-num-replicas 5 --scale-based-on-cpu --target-cpu-utilization 0.8 --region europe-west1
+
 
 
 ### 4. Cloud Computing Provisioning (Virtual Machines) with Compute Engine
@@ -524,6 +554,8 @@ i) Load data from Cloud Storage into BigQuery
       
       ## load data from into table from Google Cloud Storage &&
       load --autodetect --source_format=CSV logdata.accesslog gs://cloud-training/gcpfci/access_log.csv
+      
+      ## exit bigquery commandline
       
       
       
