@@ -20,10 +20,11 @@
         <li> Networing Services - Configuring Network Loadbalancers </li>
         <li> Compute Engine – Cloud Computing with Virtual Machines (VM) </li>
         <li> Cloud Monitoring – Cloud Deployment Manager and StackDriver </li>
+        <li> Google Kubernetes Engine </li>
+        <li> Cloud SQL and BigQuery – Data Management </li>
         <li> Cloud Marketplaces – Third-party resources exploration </li>
         <li> Cloud SQL and BigQuery – Data Management </li>
         <li> Cloud Functions – Running Serverless Functions  </li>
-        <li> Google Kubernetes Engine </li>
         <li> Google Cloud Boot </li>
     </ol>
 
@@ -257,12 +258,85 @@
 
 5.1 Create a Cloud Monitoring workspace
 
-   ## 
-
-
+   i) Create a Deployment Manager deployment
+            
+      ## set an environm variable for zone
+      export MY_ZONE=us-central1-a
+      
+      ## Create Deployment Manager template < mydeploy.yaml>:
+      ## gsutil cp gs://cloud-training/gcpfcoreinfra/mydeploy.yaml mydeploy.yaml
+      resources:
+      - name: my-vm
+        type: compute.v1.instance
+        properties:
+          zone: us-central1-a
+          machineType: zones/us-central1-a/machineTypes/n1-standard-1
+          metadata:
+            items:
+            - key: startup-script
+              value: "apt-get update"
+          disks:
+          - deviceName: boot
+            type: PERSISTENT
+            boot: true
+            autoDelete: true
+            initializeParams:
+              sourceImage: https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/debian-9-stretch-v20180806
+          networkInterfaces:
+          - network: https://www.googleapis.com/compute/v1/projects/qwiklabs-gcp-00-4aa3603ca888/global/networks/default
+            accessConfigs:
+            - name: External NAT
+              type: ONE_TO_ONE_NAT
+      
+      ## use the sed command to replace the PROJECT_ID placeholder string with your Google Cloud Platform project ID using this command
+      sed -i -e "s/PROJECT_ID/$DEVSHELL_PROJECT_ID/" mydeploy.yaml
+      
+      ## use the sed command to replace the ZONE placeholder string with your Google Cloud Platform zone using this command:
+      sed -i -e "s/ZONE/$MY_ZONE/" mydeploy.yaml
+   
+      ## Build a deployment from the template:
+      gcloud deployment-manager deployments create my-first-depl --config mydeploy.yaml
+      
+   ii) Update a Deployment Manager deployment
+   
+      ##  Launch the nano text editor to edit the mydeploy.yaml file
+      nano mydeploy.yaml
+      
+      ## sets the value of the startup script, value: "apt-get ... "
+      value: "apt-get update; apt-get install nginx-light -y"
+      
+      ## Enter this command to cause Deployment Manager to update your deployment to install the new startup script:
+      gcloud deployment-manager deployments update my-first-depl --config mydeploy.yaml
+      
+ 5.2  View the Load on a VM using Cloud Monitoring
  
+ i) Create a Monitoring workspace
  
-### 6. Cloud SQL and BigQuery – Data Management
+    ## Connect to VM with SSh 
+    gcloud compute ssh my-vm --zone us-central1-a --quiet &
+    
+    ## execute this command to create a CPU load: This Linux pipeline forces the CPU to work on compressing a continuous stream of random data.
+    dd if=/dev/urandom | gzip -9 >> /dev/null &
+    
+    
+    ## install Agents libraries
+    curl -sSO https://dl.google.com/cloudagents/add-monitoring-agent-repo.sh
+    sudo bash add-monitoring-agent-repo.sh &
+    sudo apt-get update &
+    
+    ## Install Agent
+    sudo apt-cache madison stackdriver-agent -y &
+    
+    ## or
+    sudo apt-get install -y 'stackdriver-agent=6.*'
+    
+    ## Start Agent Service
+    sudo service stackdriver-agent start &&
+    
+    ## In the Metric pane of Metrics Explorer, select the resource type GCE VM instance and the metric CPU usage.
+    
+ 
+### 6. Google Kubernetes Engine
 6.1 Create a Namespace for Kubernetes
      
  i) create a production namespace
@@ -432,3 +506,25 @@ iv) Activate Security Policy
               
      ## To attempt to run the privileged Pod, execute the following command:
      kubectl apply -f privileged-pod.yaml
+     
+7. Cloud SQL and BigQuery – Data Management
+
+i) Load data from Cloud Storage into BigQuery
+
+      ## start bigquery shell
+      export my_project_id="$(gcloud config get-value project)"
+      bq --project_id=$my_project_id --location=US shell &
+      
+      ## make dataset located in US using <mk> command
+      mk -d --description "This is my log data set." logdata
+      #mk --dataset_id=logdata --data_location=US
+      
+      ## create table <accesslog> into the dataset with schema definition
+      mk --table --expiration=3600  $my_project_id:logdata.accesslog
+      
+      ## load data from into table from Google Cloud Storage &&
+      load --autodetect --source_format=CSV logdata.accesslog gs://cloud-training/gcpfci/access_log.csv
+      
+      
+      
+      
