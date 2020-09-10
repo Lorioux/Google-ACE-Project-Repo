@@ -19,9 +19,8 @@
         <li> Virtual Private Cloud (VPC) Network – Configuring Networks, subnetworks, Firewall and Routes </li>
         <li> Networing Services - Configuring Network Loadbalancers </li>
         <li> Compute Engine – Cloud Computing with Virtual Machines (VM) </li>
-        <li> Cloud Monitoring – Cloud Resources Management </li>
+        <li> Cloud Monitoring – Cloud Deployment Manager and StackDriver </li>
         <li> Cloud Marketplaces – Third-party resources exploration </li>
-        <li> Deployment Manager </li>
         <li> Cloud SQL and BigQuery – Data Management </li>
         <li> Cloud Functions – Running Serverless Functions  </li>
         <li> Google Kubernetes Engine </li>
