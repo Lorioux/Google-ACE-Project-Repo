@@ -131,7 +131,7 @@
 i) Create the health check rule
       
       ## create firewall rule
-      gcloud compute firewall-rules create fw-allow-health-checks --priority=1000 --allow tcp:80 --source-ranges 130.211.0.0/22,35.191.0.0/16 --direction IN --network default --target-tags allow-health-checks
+      gcloud compute --project=qwiklabs-gcp-04-3008c93f8470 firewall-rules create fw-allow-health-checks --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:80 --source-ranges=130.211.0.0/22,35.191.0.0/16 --target-tags=allow-health-checks
       
 ii) Create the Cloud Router instance
    
@@ -146,18 +146,37 @@ ii) Create the Cloud Router instance
 iii) Configure an instance template and create instance groups
 
       ## Configure the instance template
-      gcloud compute instance-templates create us-central1-template --metadata="startup-script-url='gs://cloud-training/gcpnet/httplb/startup.sh'" --network=default --region=us-central1 --no-address --tags=allow-health-checks
+      gcloud compute instance-templates create us-central1-template --metadata="startup-script-url='gs://cloud-training/gcpnet/httplb/startup.sh'" --network=default --region=us-central1  --subnet default --no-address --tags=allow-health-checks
+      
+      gcloud compute instance-templates create europe-west1-template --metadata="startup-script-url='gs://cloud-training/gcpnet/httplb/startup.sh'" --network=default --region=europe-west1 --subnet default --no-address --tags=allow-health-checks
       
       ## use the instance templeate for instance gropus
       gcloud compute instance-groups managed create us-central1-mig --size 1 --template us-central1-template --instance-redistribution-type PROACTIVE --region us-central1 --zones=us-central1-b,us-central1-c,us-central1-f
       
-      gcloud compute instance-groups managed create europe-west1-mig  --size 1 --template europe-west1-template --instance-redistribution-type PROACTIVE --region europe-west1 
+      gcloud compute instance-groups managed create europe-west1-mig  --size 1 --template europe-west1-template --instance-redistribution-type PROACTIVE --region europe-west1 --zones=europe-west1-b,europe-west1-c,europe-west1-d
 
       ## Set additional configuration like autoscaling, minim and maximum no. of instances, cool-down-period
       gcloud compute instance-groups managed set-autoscaling us-central1-mig --cool-down-period 45 --min-num-replicas 1 --max-num-replicas 5 --scale-based-on-cpu --target-cpu-utilization 0.8 --region us-central1
       
       gcloud compute instance-groups managed set-autoscaling europe-west1-mig --cool-down-period 45 --min-num-replicas 1 --max-num-replicas 5 --scale-based-on-cpu --target-cpu-utilization 0.8 --region europe-west1
+      
+      ## Now that everything is set and instances are running, we can verify the backends
+      ## Connect to  vm instance in europe zone
+      declare -a name_zone=("$(gcloud compute instances list --filter="zone ~ europe*" --format="table(name, zone)")
+       
+      ## Create the security policy
+      gcloud compute --project=qwiklabs-gcp-04-3008c93f8470 security-policies create deny-siege
 
+      gcloud compute --project=qwiklabs-gcp-04-3008c93f8470 security-policies rules create 1000 --action=deny\(403\) --security-policy=deny-siege --src-ip-ranges=35.223.220.220
+
+      gcloud compute --project=qwiklabs-gcp-04-3008c93f8470 security-policies rules create 2147483647 --action=allow --security-policy=deny-siege --description="Default rule, higher priority overrides it" --src-ip-ranges=\*
+
+      gcloud compute --project=qwiklabs-gcp-04-3008c93f8470 backend-services update http-backend --security-policy=deny-siege
+      
+      
+      
+      
+      
 
 
 ### 4. Cloud Computing Provisioning (Virtual Machines) with Compute Engine
@@ -537,7 +556,7 @@ iv) Activate Security Policy
      ## To attempt to run the privileged Pod, execute the following command:
      kubectl apply -f privileged-pod.yaml
      
-7. Cloud SQL and BigQuery – Data Management
+### 7. Cloud SQL and BigQuery – Data Management
 
 i) Load data from Cloud Storage into BigQuery
 
@@ -545,7 +564,7 @@ i) Load data from Cloud Storage into BigQuery
       export my_project_id="$(gcloud config get-value project)"
       bq --project_id=$my_project_id --location=US shell &
       
-      ## make dataset located in US using <mk> command
+      ## create dataset located in US using <mk> command
       mk -d --description "This is my log data set." logdata
       #mk --dataset_id=logdata --data_location=US
       
