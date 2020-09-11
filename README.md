@@ -298,90 +298,9 @@ iii) Configure an instance template and create instance groups
       gcloud beta compute --project "qwiklabs-gcp-47fa3e3ff8a1797a" instance-groups managed set-autoscaling "us-central1-mig" --region "us-central1" --cool-down-period "60" --max-num-replicas "2" --min-num-replicas "1" --target-load-balancing-utilization "0.8" --mode "on"
 
   
-### 5. Exploring Cloud Monitoring to Manage Resources
 
-5.1 Create a Cloud Monitoring workspace
-
-   i) Create a Deployment Manager deployment
-            
-      ## set an environm variable for zone
-      export MY_ZONE=us-central1-a
-      
-      ## Create Deployment Manager template < mydeploy.yaml>:
-      ## gsutil cp gs://cloud-training/gcpfcoreinfra/mydeploy.yaml mydeploy.yaml
-      resources:
-      - name: my-vm
-        type: compute.v1.instance
-        properties:
-          zone: us-central1-a
-          machineType: zones/us-central1-a/machineTypes/n1-standard-1
-          metadata:
-            items:
-            - key: startup-script
-              value: "apt-get update"
-          disks:
-          - deviceName: boot
-            type: PERSISTENT
-            boot: true
-            autoDelete: true
-            initializeParams:
-              sourceImage: https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/debian-9-stretch-v20180806
-          networkInterfaces:
-          - network: https://www.googleapis.com/compute/v1/projects/qwiklabs-gcp-00-4aa3603ca888/global/networks/default
-            accessConfigs:
-            - name: External NAT
-              type: ONE_TO_ONE_NAT
-      
-      ## use the sed command to replace the PROJECT_ID placeholder string with your Google Cloud Platform project ID using this command
-      sed -i -e "s/PROJECT_ID/$DEVSHELL_PROJECT_ID/" mydeploy.yaml
-      
-      ## use the sed command to replace the ZONE placeholder string with your Google Cloud Platform zone using this command:
-      sed -i -e "s/ZONE/$MY_ZONE/" mydeploy.yaml
-   
-      ## Build a deployment from the template:
-      gcloud deployment-manager deployments create my-first-depl --config mydeploy.yaml
-      
-   ii) Update a Deployment Manager deployment
-   
-      ##  Launch the nano text editor to edit the mydeploy.yaml file
-      nano mydeploy.yaml
-      
-      ## sets the value of the startup script, value: "apt-get ... "
-      value: "apt-get update; apt-get install nginx-light -y"
-      
-      ## Enter this command to cause Deployment Manager to update your deployment to install the new startup script:
-      gcloud deployment-manager deployments update my-first-depl --config mydeploy.yaml
-      
- 5.2  View the Load on a VM using Cloud Monitoring
- 
- i) Create a Monitoring workspace
- 
-    ## Connect to VM with SSh 
-    gcloud compute ssh my-vm --zone us-central1-a --quiet &
-    
-    ## execute this command to create a CPU load: This Linux pipeline forces the CPU to work on compressing a continuous stream of random data.
-    dd if=/dev/urandom | gzip -9 >> /dev/null &
-    
-    
-    ## install Agents libraries
-    curl -sSO https://dl.google.com/cloudagents/add-monitoring-agent-repo.sh
-    sudo bash add-monitoring-agent-repo.sh &
-    sudo apt-get update &
-    
-    ## Install Agent
-    sudo apt-cache madison stackdriver-agent -y &
-    
-    ## or
-    sudo apt-get install -y 'stackdriver-agent=6.*'
-    
-    ## Start Agent Service
-    sudo service stackdriver-agent start &&
-    
-    ## In the Metric pane of Metrics Explorer, select the resource type GCE VM instance and the metric CPU usage.
-    
- 
-### 6. Google Kubernetes Engine
-6.1 Create a Namespace for Kubernetes
+### 5. Google Kubernetes Engine
+5.1 Create a Namespace for Kubernetes
      
  i) create a production namespace
      export zone=us-central1-a
@@ -457,7 +376,7 @@ iii) Configure an instance template and create instance groups
        ## apply role 
        kubectl apply -f username2-editor-binding.yaml
        
- 6.2 Create and Use Pod Security Policies
+ 5.2 Create and Use Pod Security Policies
  
  i) Create a Pod Security Policy
       
@@ -699,3 +618,85 @@ central1
       }
       
       
+### 9. Exploring Cloud Monitoring to Manage Resources
+
+9.1 Create a Cloud Monitoring workspace
+
+   i) Create a Deployment Manager deployment
+            
+      ## set an environm variable for zone
+      export MY_ZONE=us-central1-a
+      
+      ## Create Deployment Manager template < mydeploy.yaml>:
+      ## gsutil cp gs://cloud-training/gcpfcoreinfra/mydeploy.yaml mydeploy.yaml
+      resources:
+      - name: my-vm
+        type: compute.v1.instance
+        properties:
+          zone: us-central1-a
+          machineType: zones/us-central1-a/machineTypes/n1-standard-1
+          metadata:
+            items:
+            - key: startup-script
+              value: "apt-get update"
+          disks:
+          - deviceName: boot
+            type: PERSISTENT
+            boot: true
+            autoDelete: true
+            initializeParams:
+              sourceImage: https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/debian-9-stretch-v20180806
+          networkInterfaces:
+          - network: https://www.googleapis.com/compute/v1/projects/qwiklabs-gcp-00-4aa3603ca888/global/networks/default
+            accessConfigs:
+            - name: External NAT
+              type: ONE_TO_ONE_NAT
+      
+      ## use the sed command to replace the PROJECT_ID placeholder string with your Google Cloud Platform project ID using this command
+      sed -i -e "s/PROJECT_ID/$DEVSHELL_PROJECT_ID/" mydeploy.yaml
+      
+      ## use the sed command to replace the ZONE placeholder string with your Google Cloud Platform zone using this command:
+      sed -i -e "s/ZONE/$MY_ZONE/" mydeploy.yaml
+   
+      ## Build a deployment from the template:
+      gcloud deployment-manager deployments create my-first-depl --config mydeploy.yaml
+      
+   ii) Update a Deployment Manager deployment
+   
+      ##  Launch the nano text editor to edit the mydeploy.yaml file
+      nano mydeploy.yaml
+      
+      ## sets the value of the startup script, value: "apt-get ... "
+      value: "apt-get update; apt-get install nginx-light -y"
+      
+      ## Enter this command to cause Deployment Manager to update your deployment to install the new startup script:
+      gcloud deployment-manager deployments update my-first-depl --config mydeploy.yaml
+      
+ 9.2  View the Load on a VM using Cloud Monitoring
+ 
+ i) Create a Monitoring workspace
+ 
+    ## Connect to VM with SSh 
+    gcloud compute ssh my-vm --zone us-central1-a --quiet &
+    
+    ## execute this command to create a CPU load: This Linux pipeline forces the CPU to work on compressing a continuous stream of random data.
+    dd if=/dev/urandom | gzip -9 >> /dev/null &
+    
+    
+    ## install Agents libraries
+    curl -sSO https://dl.google.com/cloudagents/add-monitoring-agent-repo.sh
+    sudo bash add-monitoring-agent-repo.sh &
+    sudo apt-get update &
+    
+    ## Install Agent
+    sudo apt-cache madison stackdriver-agent -y &
+    
+    ## or
+    sudo apt-get install -y 'stackdriver-agent=6.*'
+    
+    ## Start Agent Service
+    sudo service stackdriver-agent start &&
+    
+    ## In the Metric pane of Metrics Explorer, select the resource type GCE VM instance and the metric CPU usage.
+    
+ 
