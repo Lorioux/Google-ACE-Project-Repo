@@ -17,15 +17,14 @@
    <ol>
         <li> Cloud IAM – Cloud Resource Management </li>
         <li> Virtual Private Cloud (VPC) Network – Configuring Networks, subnetworks, Firewall and Routes </li>
-        <li> Networing Services - Configuring Network Loadbalancers </li>
         <li> Compute Engine – Cloud Computing with Virtual Machines (VM) </li>
-        <li> Cloud Monitoring – Cloud Deployment Manager and StackDriver </li>
+        <li> Networing Services and Network Security - Configuring Network Loadbalancers and Security </li>
         <li> Google Kubernetes Engine </li>
-        <li> Cloud SQL and BigQuery – Data Management </li>
-        <li> Cloud Marketplaces – Third-party resources exploration </li>
-        <li> Cloud SQL and BigQuery – Data Management </li>
+        <li> Cloud BigQuery – Data Management </li>
+        <li> Cloud BigQuery Machine Learning – Implementing Machine Learning in GCP </li>
         <li> Cloud Functions – Running Serverless Functions  </li>
         <li> Google Cloud Boot </li>
+        <li> Cloud Monitoring – Cloud Deployment Manager and StackDriver </li>
     </ol>
 
 ### 1.	Project Access Management with Cloud IAM
@@ -174,10 +173,7 @@ iii) Configure an instance template and create instance groups
       gcloud compute --project=qwiklabs-gcp-04-3008c93f8470 backend-services update http-backend --security-policy=deny-siege
       
       
-      
-      
-      
-
+     
 
 ### 4. Cloud Computing Provisioning (Virtual Machines) with Compute Engine
 
@@ -556,9 +552,9 @@ iv) Activate Security Policy
      ## To attempt to run the privileged Pod, execute the following command:
      kubectl apply -f privileged-pod.yaml
      
-### 7. Cloud SQL and BigQuery – Data Management
+### 6. Cloud BigQuery and Machine Learning – Data Management and Data Analytics
 
-i) Load data from Cloud Storage into BigQuery
+6.1) Load data from Cloud Storage into BigQuery
 
       ## start bigquery shell
       export my_project_id="$(gcloud config get-value project)"
@@ -566,16 +562,182 @@ i) Load data from Cloud Storage into BigQuery
       
       ## create dataset located in US using <mk> command
       mk -d --description "This is my log data set." logdata
+      mk -d --description "This is my baby names data set." babynames
       #mk --dataset_id=logdata --data_location=US
       
       ## create table <accesslog> into the dataset with schema definition
       mk --table --expiration=3600  $my_project_id:logdata.accesslog
+      mk --table --expiration=3600  $my_project_id:babynames.names_2014
       
       ## load data from into table from Google Cloud Storage &&
       load --autodetect --source_format=CSV logdata.accesslog gs://cloud-training/gcpfci/access_log.csv
+      bq --project_id=$idp --location=US load --autodetect --format=csv babynames.names_2014 ./yob2014.csv
       
       ## exit bigquery commandline
       
+ 6.2 Recommending Products Using Cloud SQL and Spark
       
+ i) Create a Cloud SQL instance
+    
+      gcloud sql instances create rentalsx --database-version=MYSQL_5_7 --region us-
+central1
+ 
+ ii) Create tables
+      
+      ## connect to server
+      gcloud sql connect rentals --user=root --quiet
+      
+      ## create the tables 
+      CREATE DATABASE IF NOT EXISTS recommendation_spark;
+
+      USE recommendation_spark;
+
+      DROP TABLE IF EXISTS Recommendation;
+      DROP TABLE IF EXISTS Rating;
+      DROP TABLE IF EXISTS Accommodation;
+
+      CREATE TABLE IF NOT EXISTS Accommodation
+      (
+        id varchar(255),
+        title varchar(255),
+        location varchar(255),
+        price int,
+        rooms int,
+        rating float,
+        type varchar(255),
+        PRIMARY KEY (ID)
+      );
+
+      CREATE TABLE  IF NOT EXISTS Rating
+      (
+        userId varchar(255),
+        accoId varchar(255),
+        rating int,
+        PRIMARY KEY(accoId, userId),
+        FOREIGN KEY (accoId)
+          REFERENCES Accommodation(id)
+      );
+
+      CREATE TABLE  IF NOT EXISTS Recommendation
+      (
+        userId varchar(255),
+        accoId varchar(255),
+        prediction float,
+        PRIMARY KEY(userId, accoId),
+        FOREIGN KEY (accoId)
+          REFERENCES Accommodation(id)
+      );
+
+      ##SHOW DATABASES;
+      
+      ## Create this database
+      CREATE DATABASE IF NOT EXISTS recommendation_spark;
+
+      USE recommendation_spark;
+
+      DROP TABLE IF EXISTS Recommendation;
+      DROP TABLE IF EXISTS Rating;
+      DROP TABLE IF EXISTS Accommodation;
+
+      CREATE TABLE IF NOT EXISTS Accommodation
+      (
+        id varchar(255),
+        title varchar(255),
+        location varchar(255),
+        price int,
+        rooms int,
+        rating float,
+        type varchar(255),
+        PRIMARY KEY (ID)
+      );
+
+      CREATE TABLE  IF NOT EXISTS Rating
+      (
+        userId varchar(255),
+        accoId varchar(255),
+        rating int,
+        PRIMARY KEY(accoId, userId),
+        FOREIGN KEY (accoId)
+          REFERENCES Accommodation(id)
+      );
+
+      CREATE TABLE  IF NOT EXISTS Recommendation
+      (
+        userId varchar(255),
+        accoId varchar(255),
+        prediction float,
+        PRIMARY KEY(userId, accoId),
+        FOREIGN KEY (accoId)
+          REFERENCES Accommodation(id)
+      );
+ 
+ iii) Load data from Cloud Storage into Cloud SQL tables
+ 
+      ## Create storage backet and copy data into backet
+      gsutil mb gs://$DEVSHELL_PROJECT_ID
+      
+      gsutil cp gs://cloud-training/bdml/v2.0/data/accommodation.csv gs://$DEVSHELL_PROJECT_ID
+      gsutil cp gs://cloud-training/bdml/v2.0/data/rating.csv gs://$DEVSHELL_PROJECT_ID
+      
+      ## Load data into tables from storage backets
+      gcloud sql import csv rents gs://$DEVSHELL_PROJECT_ID/accommodation.csv  --database=recommendation_spark --table=Accommodation
+      gcloud sql import csv rentsx gs://$DEVSHELL_PROJECT_ID/reting.csv  --database=recommendation_spark --table=Rating
+ 
+ i)   Launch Dataproc
+ 
+      ## gcloud dataproc clusters create rentals --region us-central1 --subnet default --zone us-central1-a --master-machine-type n1-standard-4 --master-boot-disk-size 500 --num-workers 2 --worker-machine-type n1-standard-4 --worker-boot-disk-size 500 --image-version 1.3-debian10 --project qwiklabs-gcp-04-527c9e0f6c10
+      
+      ## Create a file dataproc_launcher.sh and copy this code:
+      echo "Authorizing Cloud Dataproc to connect with Cloud SQL"
+      CLUSTER=rentals
+      CLOUDSQL=rentals
+      ZONE=us-central1-a
+      NWORKERS=2
+
+      machines="$CLUSTER-m"
+      for w in `seq 0 $(($NWORKERS - 1))`; do
+         machines="$machines $CLUSTER-w-$w"
+      done
+
+      echo "Machines to authorize: $machines in $ZONE ... finding their IP addresses"
+      ips=""
+      for machine in $machines; do
+          IP_ADDRESS=$(gcloud compute instances describe $machine --zone=$ZONE --format='value(networkInterfaces.accessConfigs[].natIP)' | sed "s/\['//g" | sed "s/'\]//g" )/32
+          echo "IP address of $machine is $IP_ADDRESS"
+          if [ -z  $ips ]; then
+             ips=$IP_ADDRESS
+          else
+             ips="$ips,$IP_ADDRESS"
+          fi
+      done
+
+      echo "Authorizing [$ips] to access cloudsql=$CLOUDSQL"
+      gcloud sql instances patch $CLOUDSQL --authorized-networks $ips --quiet
+ 
+ v) Run the ML model
+ 
+      # Download and edit this file, changing the IP, Password to SQL instance IP and password
+      gsutil cp gs://cloud-training/bdml/v2.0/model/train_and_apply.py train_and_apply.py
+      # cloudshell edit train_and_apply.py
+      
+      # copy into storage
+      gsutil cp train_and_apply.py gs://$DEVSHELL_PROJECT_ID
+      
+      # Create a Job to run our Model, with REST EQUIVALENT TO:
+      POST /v1/projects/[project_id]/regions/us-central1/jobs:submit/
+      {
+        "projectId": "qwiklabs-gcp-04-527c9e0f6c10",
+        "job": {
+          "placement": {
+            "clusterName": "rentals"
+          },
+          "reference": {
+            "jobId": "job-b093a52f"
+          },
+          "pysparkJob": {
+            "mainPythonFileUri": "gs://qwiklabs-gcp-04-527c9e0f6c10/train_and_apply.py"
+          }
+        }
+      }
       
       
