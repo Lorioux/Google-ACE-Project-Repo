@@ -20,8 +20,7 @@
         <li> Compute Engine – Cloud Computing with Virtual Machines (VM) </li>
         <li> Networing Services and Network Security - Configuring Network Loadbalancers and Security </li>
         <li> Google Kubernetes Engine </li>
-        <li> Cloud BigQuery – Data Management </li>
-        <li> Cloud BigQuery Machine Learning – Implementing Machine Learning in GCP </li>
+        <li> Cloud BigQuery, Cloud SQL, Cloud Dataproc, Machine Learning – Data Management, Implementing Machine Learning in GCP and Data Analytics </li>
         <li> Cloud Functions – Running Serverless Functions  </li>
         <li> Google Cloud Boot </li>
         <li> Cloud Monitoring – Cloud Deployment Manager and StackDriver </li>
