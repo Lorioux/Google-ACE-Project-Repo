@@ -22,7 +22,6 @@
         <li> Google Kubernetes Engine </li>
         <li> Cloud BigQuery, Cloud SQL, Cloud Dataproc, Machine Learning – Data Management, Implementing Machine Learning in GCP and Data Analytics </li>
         <li> Cloud Functions – Running Serverless Functions  </li>
-        <li> Google Cloud Boot </li>
         <li> Cloud Monitoring – Cloud Deployment Manager and StackDriver </li>
     </ol>
 
@@ -615,11 +614,36 @@ iv) Activate Security Policy
           }
         }
       }
-      
-      
-### 9. Exploring Cloud Monitoring to Manage Resources
 
-9.1 Create a Cloud Monitoring workspace
+
+### 7. Cloud Functions and Cloud Pub/Sub – Running Serverless Functions (example)
+
+7.1 Clone source code in Cloud Shell
+
+      ## clone the repository for the class, enter the following command:
+      git clone https://github.com/GoogleCloudPlatform/training-data-analyst
+      
+      ## Create a soft link as a shortcut to your working directory:
+      ln -s ~/training-data-analyst/courses/developingapps/v1.2/nodejs/cloudfunctions ~/cloudfunctions
+      
+7.2 Configure and run the case study application
+
+      ##  change the working directory, enter the following command:
+      cd ~/cloudfunctions/start
+      
+      configure the Quiz application, enter the following command:
+      . prepare_environment.sh
+      
+      ## run the web application, enter the following command:
+      npm start
+      
+ 7.3 Working with Cloud Functions
+ 
+      ## 
+      
+### 8. Exploring Cloud Monitoring to Manage Resources
+
+8.1 Create a Cloud Monitoring workspace
 
    i) Create a Deployment Manager deployment
             
@@ -671,7 +695,7 @@ iv) Activate Security Policy
       ## Enter this command to cause Deployment Manager to update your deployment to install the new startup script:
       gcloud deployment-manager deployments update my-first-depl --config mydeploy.yaml
       
- 9.2  View the Load on a VM using Cloud Monitoring
+ 8.2  View the Load on a VM using Cloud Monitoring
  
  i) Create a Monitoring workspace
  
