@@ -11,7 +11,7 @@
     </ol>
 </section>
 
-### In order to reach former project milestones, I ‘will explore multiple GCP capabilities such as: 
+#### In order to reach former project milestones, I ‘will explore multiple GCP capabilities such as: 
 
     
    <ol>
@@ -30,7 +30,9 @@
   As any business initiative need to be protected for non-authorized stakeholders, the cloud-based project (initiative)is handled similarly. Only affected – most directly affected stakeholders - need to have adequate minimal authorization level to access project information and resources. Herein, we apply the same principle for this demo project by:
   
    #### i)    Setting up stakeholder(users) roles
+              
    #### ii)   Setting up the Service Accounts
+   
    #### iii)  Binding Members to the Service Accounts and Roles
    
         gcloud iam service-accounts create read-bucket-objects 
@@ -94,7 +96,7 @@
             gcloud compute networks subnets create privatesubnet-us --network=privatenet --region=us-central1 --range=172.16.0.0/24
             gcloud compute networks subnets create privatesubnet-eu --network=privatenet --region=europe-west1 --range=172.20.0.0/20
             
-### 3. Networing Services - Configuring Network Loadbalancers
+### 3. Networking Services - Configuring Network Loadbalancers
 
 3.1 Configure a health-check firewall
       
