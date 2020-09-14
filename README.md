@@ -3,7 +3,7 @@
 
 
 
-### This project aims at creation cloud service take advantage of the Google Cloud Platform Capabilities. Through this project, will demonstrate how we organize, development and deploy a cloud-based service by:
+#### This project aims at creation cloud service take advantage of the Google Cloud Platform Capabilities. Through this project, will demonstrate how we organize, development and deploy a cloud-based service by:
 <section>
    <ol>
         <li> Creating a project for a business initiative. </li>
