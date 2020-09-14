@@ -11,7 +11,7 @@
     </ol>
 </section>
 
-#### In order to reach former project milestones, I ‘will explore multiple GCP capabilities such as: 
+#### In order to reach former project milestones, I explore multiple GCP capabilities such as: 
 
     
    <ol>
