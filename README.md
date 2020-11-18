@@ -3,7 +3,7 @@
 
 
 
-#### This project aims at creation cloud service take advantage of the Google Cloud Platform Capabilities. Through this project, will demonstrate how we organize, development and deploy a cloud-based service by:
+#### This project aims at creation cloud service taking advantage of the Google Cloud Platform Capabilities. Through this project, will demonstrate how we organize, development and deploy a cloud-based service by:
 <section>
    <ol>
         <li> Creating a project for a business initiative. </li>
@@ -178,7 +178,7 @@ iii) Configure an instance template and create instance groups
       
      
 
-### 4. Cloud Computing Provisioning (Virtual Machines) with Compute Engine
+### 4. Cloud Computer Provisioning (Virtual Machines) with Compute Engine
 
   Like bare steel server hosted in-premisse, we rely on server running on Virtual Machines. The GCP Compute  Engine resource enable the creation on VM Instances as one would need to deploy web servers, application server, etc.
   
