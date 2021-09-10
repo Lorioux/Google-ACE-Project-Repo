@@ -55,7 +55,7 @@
           declare -a rules=("$( gcloud compute firewall-rules list --format='table(name)')");
         
           ## delete a firewall rules
-          for r in $rules; do 
+          for r in "${rules[@]}"; do 
               gcloud compute firewall-rules delete $r --quiet;
           done;
           index=0;
